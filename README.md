@@ -26,11 +26,6 @@ Kafka - de 0 a PRO - Práctica Guiada
 
 <!--te-->
 
-Kafka - de 0 a PRO - Práctica Guiada.
-=====================================
-
-En este repositorio podrás encontrar el material necesario para entender el funcionamiento de Apache Kafka y sus APIs.
-
 ## Prerequisitos
 
  * Docker Instalado: Para facilitar la práctica y el manejo montaremos nuestro propio "cluster" de Kafka en contenedores docker.
