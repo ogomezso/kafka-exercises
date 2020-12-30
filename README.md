@@ -41,6 +41,12 @@ Kafka - de 0 a PRO - Práctica Guiada
 El repositorio estará organizado en carpetas, por temática (API), dentro de la cual encontraréis una con el ejercicio propuesto a resolver y otra con el ejercicio resuelto.
 
 ## Arrancando el Clúster
+
+Abre la carpeta _**Environment**_ y ejecuta:
+
+```
+docker-compose -f zk-simple-kafka-multiple.yml up -d
+```
 ## Admin API
 ### Settings Básicos
 ### Creando un Topic
