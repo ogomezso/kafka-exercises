@@ -1,32 +1,28 @@
+<!--ts-->
+   * [Kafka - de 0 a PRO - Práctica Guiada](#kafka---de-0-a-pro---pr\xC3\xA1ctica-guiada)
+      * [Prerrequisitos](#prerrequisitos)
+      * [Organización del Repositorio](#organizaci\xC3\xB3n-del-repositorio)
+      * [Arrancando el Clúster](#arrancando-el-cl\xC3\xBAster)
+      * [Admin API](#admin-api)
+         * [Settings Básicos](#settings-b\xC3\xA1sicos)
+         * [Creación y Administración de un Topic](#creaci\xC3\xB3n-y-administraci\xC3\xB3n-de-un-topic)
+      * [Producer / Consumer API](#producer--consumer-api)
+         * [Console Producer](#console-producer)
+         * [Java Producer / Consumer](#java-producer--consumer)
+         * [Python Producer / Consumer](#python-producer--consumer)
+      * [Streams API](#streams-api)
+         * [Java Streams](#java-streams)
+         * [Python Streams](#python-streams)
+      * [Kafka Connect](#kafka-connect)
+      * [KSQL](#ksql)
+
+<!-- Added by: ogomez, at: jue 07 ene 2021 18:04:00 CET -->
+
+<!--te-->
 Kafka - de 0 a PRO - Práctica Guiada
 ====================================
 
-Índice
-======
-
-<!--ts-->
-
-* [Prerequisitos](#prerequisitos)
-* [Organización del Repositorio](#organizaci\xC3\xB3n-del-repositorio)
-* [Arrancando el Clúster](#arrancando-el-cl\xC3\xBAster)
-* [Admin API](#admin-api)
-    * [Settings Básicos](#settings-b\xC3\xA1sicos)
-    * [Creando un Topic](#creando-un-topic)
-* [Producer / Consumer API](#producer--consumer-api)
-    * [Console Producer](#console-producer)
-    * [Java Producer / Consumer](#java-producer--consumer)
-    * [Python Producer / Consumer](#python-producer--consumer)
-* [Streams API](#streams-api)
-    * [Java Streams](#java-streams)
-    * [Python Streams](#python-streams)
-* [Kafka Connect](#kafka-connect)
-* [KSQL](#ksql)
-
-<!-- Added by: ogomez, at: mar 29 dic 2020 20:10:47 CET -->
-
-<!--te-->
-
-## Prerequisitos
+## Prerrequisitos
 
  * Docker Instalado: Para facilitar la práctica y el manejo montaremos nuestro propio "cluster" de Kafka en contenedores docker.
     
@@ -42,7 +38,7 @@ El repositorio estará organizado en carpetas, por temática (API), dentro de la
 
 ## Arrancando el Clúster
 
-Abre la carpeta _**Environment**_ y ejecuta:
+Abre la carpeta _**1.Environment**_ y ejecuta:
 
 ```
 docker-compose -f zk-simple-kafka-multiple.yml up -d
@@ -68,13 +64,13 @@ Por tanto lo primero que necesitaremos será habilitar una consola interactiva d
 docker exec -it kafka-broker-1 /bin/bash
 ```
 
-una vez dentro ejecutaremos el comando **kafka-configs** para listar la configuración de brokers activa en este momento:
+Una vez dentro ejecutaremos el comando **kafka-configs** para listar la configuración de brokers activa en este momento:
 
 ```
 kafka-configs --bootstrap-server kafka1:19092 --entity-type brokers --describe --all
 ```
 
-####Ejercicio 1 - Administración de Configuración básica desde línea de comandos
+####Ejercicio 1 - Administración de Configuración básica del clúster desde línea de comandos
 
 ````
 1. Utiliza el comando **kafka-configs** para setear la propiedad _message.max.bytes_ a _512_ en el broker 1
@@ -84,9 +80,11 @@ kafka-configs --bootstrap-server kafka1:19092 --entity-type brokers --describe -
 3. Utiliza el comando **kafka-configs** para setear la propiedad _message.max.bytes_ a _512_ en todos los brokers
 
 4. Revierte la propiedad al valor por defecto para todos los broker.
+
+5. ¿Qué pasa si usa configuración solo existe en un broker e intentamos borrarla de todos a la vez?, ¿Testealo con los scripts anteriores?
 ````
 
-### Creando un Topic
+### Creación y Administración de un Topic
 
 Utilizaremos el comando **kafka-topics** para crear y administrar topics dentro de nuestro cluster:
 
@@ -99,7 +97,8 @@ docker logs -f kafka-broker-<id>
 Dentro del contenedor (recuerda docker exec...) de cual quiera de nuestros broker ejecutaremos:
 
 ````
-5
+kafka-topics --bootstrap-server kafka1:19092 --create --topic my-topic --partitions 1 \
+      --replication-factor 1 --config max.message.bytes=64000 --config flush.messages=1
 ````
 
 Vamos a modificar el numero de particiones y replicas de nuestro topic y observemos lo que pasa:
@@ -143,6 +142,17 @@ cat << EOF > increase-replication-factor.json
 ```
 kafka-reassign-partitions --bootstrap-server kafka1:19092 --reassignment-json-file    increase-replication-factor.json --execute
 ```
+####Ejercicio 2 - Administración de Topics
+
+````
+1. Crea un topic con 1 particion, factor de replica 1, y que sincronice tras 5 mensajes
+
+2. Cambia el número de particiones a 3 y reasigna la replicación de manera óptima.
+
+3. Cambia la configuración de sincronizacón para que esta se haga tras cada mensaje.
+
+4. Experimenta matando y levantando brokers, ¿Crees que tu asignación del factor de replica fue adecuada?
+````
 
 ## Producer / Consumer API
 ### Console Producer

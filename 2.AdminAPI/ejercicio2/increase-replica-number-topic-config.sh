@@ -1,0 +1,1 @@
+kafka-reassign-partitions --bootstrap-server kafka1:19092 --reassignment-json-file    test-topic-replica-config.json --execute

@@ -1,0 +1,15 @@
+{"version":1,
+ "partitions":[
+    {"topic":"test-topic",
+     "partition":0,
+     "replicas":[1,2,3]
+    },
+   {"topic":"test-topic",
+     "partition":1,
+     "replicas":[2,3,1]
+   }
+   {"topic":"test-topic",
+     "partition":2,
+     "replicas":[3,1,2]
+   }
+  ]

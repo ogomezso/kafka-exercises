@@ -1,0 +1,1 @@
+kafka-configs --bootstrap-server kafka1:19092 --entity-type topics --entity-name my-topic --alter --add-config flush.messages=1
