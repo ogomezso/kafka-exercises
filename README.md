@@ -74,8 +74,9 @@ una vez dentro ejecutaremos el comando **kafka-configs** para listar la configur
 kafka-configs --bootstrap-server kafka1:19092 --entity-type brokers --describe --all
 ```
 
-####Ejericicio 1
+####Ejercicio 1 - Administración de Configuración básica desde línea de comandos
 
+````
 1. Utiliza el comando **kafka-configs** para setear la propiedad _message.max.bytes_ a _512_ en el broker 1
 
 2. Utiliza el comando **kafka-configs** para comprobar el efecto de tu acción.
@@ -83,8 +84,66 @@ kafka-configs --bootstrap-server kafka1:19092 --entity-type brokers --describe -
 3. Utiliza el comando **kafka-configs** para setear la propiedad _message.max.bytes_ a _512_ en todos los brokers
 
 4. Revierte la propiedad al valor por defecto para todos los broker.
+````
 
 ### Creando un Topic
+
+Utilizaremos el comando **kafka-topics** para crear y administrar topics dentro de nuestro cluster:
+
+Para monitorizar lo que está pasando en nuestro cluster, abriremos el log de cada broker en una consola aparte ejecutando:
+
+````
+docker logs -f kafka-broker-<id>
+````
+
+Dentro del contenedor (recuerda docker exec...) de cual quiera de nuestros broker ejecutaremos:
+
+````
+5
+````
+
+Vamos a modificar el numero de particiones y replicas de nuestro topic y observemos lo que pasa:
+
+Para el número de particiones:
+````
+kafka-topics --bootstrap-server kafka1:19092 --alter --topic my-topic --partitions 2
+````
+El incremento de réplicas más "tricky", necesitaremos reasignar la réplica de cada partición a mano (algo a evitar tanto como sea posible).
+
+Primero necesitamos saber cual es la configuración actual del topic:
+
+```
+kafka-topics --bootstrap-server kafka1:19092 --topic my-topic --describe
+```
+
+También necesitaremos un fichero JSON que describa esta reasignación, increase-replication-factor.json:
+
+```JSON
+{"version":1,
+ "partitions":[
+    {"topic":"my-topic",
+     "partition":0,
+     "replicas":[1,3,2]
+    },
+   {"topic":"my-topic",
+     "partition":1,
+     "replicas":[2,3,1]
+   }
+  ]
+}
+```
+
+Para crear el archivo dentro de nuestro broker podemos usar el comando:
+
+```
+cat << EOF > increase-replication-factor.json
+```
+ Por último ejecutaremos el comando:
+
+```
+kafka-reassign-partitions --bootstrap-server kafka1:19092 --reassignment-json-file    increase-replication-factor.json --execute
+```
+
 ## Producer / Consumer API
 ### Console Producer
 ### Java Producer / Consumer
