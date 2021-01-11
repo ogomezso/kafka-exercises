@@ -26,7 +26,7 @@ def on_send_error(ex):
 
 for i in range(1000):
   key = str(random.randint(0, 9))
-  producer.send('simple-producer-topic', key=key.encode('utf-8'),
+  producer.send('simple-topic', key=key.encode('utf-8'),
                 value={'msg': str(i)}).add_callback(
       on_send_success).add_errback(on_send_error)
 

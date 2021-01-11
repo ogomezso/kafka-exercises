@@ -4,13 +4,13 @@ import json
 
 from kafka import KafkaConsumer
 
-consumer = KafkaConsumer('simple-producer-topic',
+consumer = KafkaConsumer('simple-topic',
                          group_id='py-group',
                          bootstrap_servers=['127.0.0.1:9092', '127.0.0.1:9093',
                                             '127.0.0.1:9094'],
                          auto_offset_reset='earliest')
 
-consumer.subscribe(['simple-producer-topic'])
+consumer.subscribe(['simple-topic'])
 
 for message in consumer:
   # message value and key are raw bytes -- decode if necessary!
