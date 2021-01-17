@@ -1,0 +1,1 @@
+kafka-console-consumer --bootstrap-server kafka1:19092 --topic grouped-output-topic --property print.key=true --from-beginning  --consumer-property group.id=grouped-consumer --property "value.deserializer=org.apache.kafka.common.serialization.LongDeserializer"

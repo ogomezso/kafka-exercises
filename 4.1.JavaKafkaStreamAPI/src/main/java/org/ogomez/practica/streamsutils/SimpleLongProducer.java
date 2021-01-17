@@ -1,6 +1,6 @@
-package org.ogomez.nontx;
+package org.ogomez.practica.streamsutils;
 
-import java.util.Random;
+import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -8,23 +8,25 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SimpleProducer {
+public class SimpleLongProducer {
 
   public static void main(String[] args) throws ExecutionException, InterruptedException {
 
-    final Logger logger = LoggerFactory.getLogger(SimpleProducer.class);
+    final Logger logger = LoggerFactory.getLogger(SimpleLongProducer.class);
 
-    KafkaProducer<String, String> producer = KafkaConfig.createKafkaProducer();
+    KafkaProducer<String, Long> producer = KafkaConfig.createKafkaLongProducer();
 
-    Random random = new Random();
+    String inputTopic = readFromConsole("Introduce el topic: ");
+    System.out.println("Estas produciendo en el topic: " + inputTopic);
 
-    for (int i = 0; i < 1000; i++) {
+    while (true) {
 
-      String key = String.valueOf(random.ints(0, 9).findFirst().orElse(0));
-      String value = "{\"msg\":\"" + i + "\"}";
+      String key = readFromConsole("Introduce la key: ");
 
-      ProducerRecord<String, String> record =
-          new ProducerRecord<>(KafkaConfig.INPUT_TOPIC, key, value);
+      Long value = Long.valueOf(readFromConsole("Introduce el mensaje: "));
+
+      ProducerRecord<String, Long> record =
+          new ProducerRecord<>(inputTopic, key, value);
 
       logger.info("Key: " + key);
       logger.info("value:" + value);
@@ -42,8 +44,11 @@ public class SimpleProducer {
       }).get();
     }
 
-    producer.flush();
-    producer.close();
+  }
 
+  private static String readFromConsole(String msg) {
+    Scanner sc = new Scanner(System.in); //System.in is a standard input stream
+    System.out.print(msg);
+    return sc.nextLine();              //reads string
   }
 }

@@ -1,0 +1,1 @@
+kafka-console-producer --bootstrap-server kafka1:19092 --topic wordcount-input-topic --property "parse.key=true" --property "key.separator=,"

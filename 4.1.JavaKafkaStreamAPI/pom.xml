@@ -2,7 +2,7 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <artifactId>JavaConsumerProducerAPI</artifactId>
+  <artifactId>JavaKafkaStreamAPI</artifactId>
 
   <dependencies>
     <dependency>
@@ -12,19 +12,28 @@
     </dependency>
 
     <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka-streams</artifactId>
+      <version>${kafka.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>${slf4j.version}</version>
     </dependency>
   </dependencies>
-  <groupId>org.ogomez</groupId>
-  <properties>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
-    <kafka.version>2.7.0</kafka.version>
-    <slf4j.version>1.7.25</slf4j.version>
-  </properties>
+
+  <groupId>org.example</groupId>
   <modelVersion>4.0.0</modelVersion>
 
+  <properties>
+    <kafka.version>2.7.0</kafka.version>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <slf4j.version>1.7.25</slf4j.version>
+  </properties>
+
   <version>1.0-SNAPSHOT</version>
+
 </project>

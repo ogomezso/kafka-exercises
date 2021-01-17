@@ -14,7 +14,7 @@ public class SimpleConsumer {
 
     Logger logger = LoggerFactory.getLogger(SimpleConsumer.class.getName());
 
-    KafkaConsumer<String, String> consumer = CreateKafkaConfig.createKafkaConsumer();
+    KafkaConsumer<String, String> consumer = KafkaConfig.createKafkaConsumer();
 
     while (true) {
       ConsumerRecords<String, String> records =

@@ -281,6 +281,8 @@ De nuevo necesitamos que los eventos de cada medidor sean atendidos por un solo 
 
 ## Streams API
 
+https://kafka.apache.org/documentation/streams/
+https://www.confluent.io/blog/crossing-streams-joins-apache-kafka/
 ### Java/Python Streams
 
 ## Kafka Connect
