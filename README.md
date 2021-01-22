@@ -17,11 +17,11 @@ Indice
          * [Java/Python Producer / Consumer](#javapython-producer--consumer)
          * [Ejercicio2 - Console Producer / Consumer](#ejercicio2---console-producer--consumer)
       * [Streams API](#streams-api)
-         * [Java/Python Streams](#javapython-streams)
+         * [Stream Basics](#stream-basics)
       * [Kafka Connect](#kafka-connect)
       * [KSQL](#ksql)
 
-<!-- Added by: ogomez, at: dom 10 ene 2021 20:28:33 CET -->
+<!-- Added by: ogomez, at: vie 22 ene 2021 14:40:55 CET -->
 
 <!--te-->
 Kafka - de 0 a PRO - Práctica Guiada
