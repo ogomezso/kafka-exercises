@@ -1,0 +1,30 @@
+{
+  "_id": {
+    "_data": "826009E09D000000022B022C0100296E5A10044F685E67AE8E49AC96341014482D89B146645F696400646009E09D2AB98F0618F2755C0004"
+  },
+  "operationType": "insert",
+  "clusterTime": {
+    "$timestamp": {
+      "t": 1611260061,
+      "i": 2
+    }
+  },
+  "fullDocument": {
+    "_id": {
+      "$oid": "6009e09d2ab98f0618f2755c"
+    },
+    "id": "299",
+    "title": "Die Hard",
+    "releaseYear": "1988"
+  },
+  "ns": {
+    "db": "test",
+    "coll": "movies"
+  },
+  "documentKey": {
+    "_id": {
+      "$oid": "6009e09d2ab98f0618f2755c"
+    }
+  }
+}
+

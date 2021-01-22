@@ -281,16 +281,24 @@ De nuevo necesitamos que los eventos de cada medidor sean atendidos por un solo 
 
 ## Streams API
 
-https://kafka.apache.org/documentation/streams/
+Toda la documentación oficial del API de Streams [aquí](https://kafka.apache.org/documentation/streams/)
+
+### Stream Basics
+
+Para el primer ejemplo buscaremos los básicos de Stream KTable y KStream, la mejor explicación grafica la podemos encontrar [aquí](https://www.confluent.io/blog/kafka-streams-tables-part-1-event-streaming/)
+
 
 https://www.confluent.io/blog/crossing-streams-joins-apache-kafka/
 
-
-### Java/Python Streams
-
 ## Kafka Connect
 
-https://github.com/amient/hello-kafka-streams
+docker-compose -f zk-simple-kafka-multiple.yml exec mongo1 /usr/bin/mongo
+
+https://docs.confluent.io/home/connect/install.html
+https://turkogluc.com/apache-kafka-connect-introduction/
+
+
+https://www.confluent.io/hub/
 
 https://www.confluent.io/blog/hello-world-kafka-connect-kafka-streams/
 

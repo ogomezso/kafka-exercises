@@ -1,0 +1,6 @@
+this is
+a plain text
+example
+for
+kafka
+connect
