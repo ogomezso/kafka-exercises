@@ -109,8 +109,7 @@ docker logs -f kafka-broker-<id>
 Dentro del contenedor (recuerda docker exec...) de cual quiera de nuestros broker ejecutaremos:
 
 ````
-kafka-topics --bootstrap-server kafka1:19092 --create --topic my-topic --partitions 1 \
-      --replication-factor 1 --config max.message.bytes=64000 --config flush.messages=1
+kafka-topics --bootstrap-server kafka1:19092 --create --topic my-topic --partitions 1 --replication-factor 1 --config max.message.bytes=64000 --config flush.messages=1
 ````
 
 Vamos a modificar el numero de particiones y replicas de nuestro topic y observemos lo que pasa:
@@ -211,7 +210,7 @@ kafka-console-consumer --bootstrap-server kafka1:19092 --topic console-example -
 <details>
   <summary><b>Solución</b></summary>
 
-¡El consumidorR consume todos los mensajes!.
+¡El consumidor consume todos los mensajes!.
 </details>
 
 ¿Que pasara si añadimos otro consumidor?
@@ -234,7 +233,7 @@ Observad el rebalanceo y particionado que se produce mediante la partition key e
 
 ### Ejercicio1 - Console Producer / Consumer
 ````
-Necesitamos crear un productor para que un operador desde consola introduzca las lecturas de 4 medidores de temperatura de una sala.
+Necesitamos crear un productor para que un operador desde consola introduzca las lecturas de n (15??) medidores de temperatura de una sala.
 
 Cada lectura la recibira un dispositivo distinto simulado a través de un consumidor de consola independentiente, queremos que cada consumidor solo reciba la medición correspondiente a su medidor teniendo en cuenta que es muy importante preservar el orden de las mediciones tomadas.
 ````
@@ -250,7 +249,7 @@ pip install kafka-python
 Observemos la configuración de la clase SimpleProducer. ¿Qué pasa en nuestro cluster si la ejecutamos "directamente"?
 
 ```
-Usa el comando kafka-topics para ver que ha pasado con nuestro simple-producer-topic
+Usa el comando kafka-topics para ver que ha pasado con nuestro simple-topic
 ```
 
 Es momento ahora de crear nuestro primer consumidor. ¿Sabrías decir que pasará cuando arranquemos nuestro SimpleConsumer1?
@@ -274,7 +273,7 @@ Los nuevos mensajes empezarán a ser consumidos por el proceso perteneciente al 
 ### Ejercicio2 - Console Producer / Consumer
 
 ````
-Es tiempo ahora de volver a nuestro medidor de temperatura. Esta vez simularemos cada dispositivo con su Clase productora equivalente.
+Es tiempo ahora de volver a nuestro medidor de temperatura. Esta vez simularemos cada dispositivo en una clase productora equivalente.
 
 De nuevo necesitamos que los eventos de cada medidor sean atendidos por un solo consumidor y en el orden establecido.
 ````

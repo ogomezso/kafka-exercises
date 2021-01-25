@@ -8,6 +8,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.KafkaException;
 
 import static org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG;
+import static org.apache.kafka.clients.producer.ProducerConfig.ACKS_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
 import static org.apache.kafka.clients.producer.ProducerConfig.TRANSACTIONAL_ID_CONFIG;
@@ -44,7 +45,8 @@ public class TxMessageProducer {
   private static KafkaProducer<String,String> createKafkaProducer() {
 
     Properties props = new Properties();
-    props.put(BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+    props.put(BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092, 127.0.0.1:9093, 127.0.0.1:9094");
+    props.put(ACKS_CONFIG,"all");
     props.put(ENABLE_IDEMPOTENCE_CONFIG, "true");
     props.put(TRANSACTIONAL_ID_CONFIG, "prod-0");
     props.put(KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
