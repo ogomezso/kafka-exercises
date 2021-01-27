@@ -21,6 +21,7 @@ public class MovieTopology {
   private static final String TEMP_STATE_DIR = "./temp";
   private static final int NUM_PARTITIONS = 3;
   private static final short REPLICATION_FACTOR = 3;
+  private static final String PROCESSING_GUARANTEE_CONFIG= "exactly_once";
 
   public static Properties createStreamsConfigProperties(String applicationId) {
 
@@ -29,6 +30,8 @@ public class MovieTopology {
     streamsConfiguration.put(StreamsConfig.APPLICATION_ID_CONFIG, applicationId);
     streamsConfiguration.put(
         StreamsConfig.STATE_DIR_CONFIG, TEMP_STATE_DIR);
+    streamsConfiguration.put(
+        StreamsConfig.PROCESSING_GUARANTEE_CONFIG,PROCESSING_GUARANTEE_CONFIG);
 
     return streamsConfiguration;
   }

@@ -23,6 +23,7 @@ public class KafkaStreamsWordCount {
   private static final String BOOTSTRAP_SERVERS = "127.0.0.1:9092, 127.0.0.1:9093, 127.0.0.1:9094";
   private static final String INPUT_TOPIC = "wordcount-input-topic";
   private static final String OUTPUT_TOPIC = "wordcount-output-topic";
+  private static final String PROCESSING_GUARANTEE_CONFIG= "exactly_once";
   private static final String TEMP_STATE_DIR = "./temp";
   private static final int NUM_PARTITIONS = 3;
   private static final short REPLICATION_FACTOR = 3;
@@ -40,6 +41,8 @@ public class KafkaStreamsWordCount {
         Serdes.String().getClass().getName());
     streamsConfiguration.put(
         StreamsConfig.STATE_DIR_CONFIG, TEMP_STATE_DIR);
+    streamsConfiguration.put(
+        StreamsConfig.PROCESSING_GUARANTEE_CONFIG,PROCESSING_GUARANTEE_CONFIG);
 
     return streamsConfiguration;
   }

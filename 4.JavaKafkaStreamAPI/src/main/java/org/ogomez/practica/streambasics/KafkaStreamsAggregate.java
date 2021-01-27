@@ -11,14 +11,18 @@ import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KGroupedStream;
+import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Printed;
+import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.kstream.TimeWindows;
+import org.apache.kafka.streams.kstream.Windowed;
 
 public class KafkaStreamsAggregate {
 
@@ -26,6 +30,7 @@ public class KafkaStreamsAggregate {
   private static final String INPUT_TOPIC = "aggregate-input-topic";
   private static final String OUTPUT_TOPIC = "aggregate-output-topic";
   private static final String TEMP_STATE_DIR = "./temp";
+  private static final String PROCESSING_GUARANTEE_CONFIG = "exactly_once";
   private static final int NUM_PARTITIONS = 3;
   private static final short REPLICATION_FACTOR = 3;
 
@@ -42,6 +47,8 @@ public class KafkaStreamsAggregate {
         Serdes.Long().getClass().getName());
     streamsConfiguration.put(
         StreamsConfig.STATE_DIR_CONFIG, TEMP_STATE_DIR);
+    streamsConfiguration.put(
+        StreamsConfig.PROCESSING_GUARANTEE_CONFIG, PROCESSING_GUARANTEE_CONFIG);
 
     return streamsConfiguration;
   }
@@ -79,12 +86,16 @@ public class KafkaStreamsAggregate {
         Consumed.with(Serdes.String(), Serdes.Long()))
         .groupByKey();
 
-    inputStream
+    KStream<String, Long> outputStream = inputStream
         .windowedBy(TimeWindows.of(Duration.ofSeconds(20)))
         .aggregate(() -> 0L, (key, newValue, aggValue) -> newValue + aggValue,
             Materialized.with(Serdes.String(), Serdes.Long()))
         .toStream()
-        .print(Printed.toSysOut());
+        .map((Windowed<String> key, Long count) -> new KeyValue<>(key.key(), count));
+
+    outputStream.print(Printed.toSysOut());
+    outputStream.to(OUTPUT_TOPIC,
+       Produced.with(Serdes.String(),Serdes.Long()));
 
     Topology topology = builder.build();
     final KafkaStreams streams = new KafkaStreams(topology,

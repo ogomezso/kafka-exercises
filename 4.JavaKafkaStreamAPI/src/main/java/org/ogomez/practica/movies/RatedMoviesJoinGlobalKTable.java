@@ -25,7 +25,6 @@ public class RatedMoviesJoinGlobalKTable {
     MovieTopology.createTopics();
 
     final StreamsBuilder builder = new StreamsBuilder();
-    final MovieRatingJoiner movieRatingJoiner = new MovieRatingJoiner();
 
     KStream<String, Movie> movieStream = builder.stream(MovieTopology.MOVIES_TOPIC,
         Consumed.with(Serdes.String(), MovieCustomSerdes.Movie()));

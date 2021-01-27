@@ -1,6 +1,5 @@
 package org.ogomez.practica.streambasics;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +14,9 @@ import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.Consumed;
+import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Printed;
-import org.apache.kafka.streams.kstream.TimeWindows;
+import org.apache.kafka.streams.kstream.Produced;
 
 public class KafkaStreamGroupedKey {
 
@@ -24,6 +24,7 @@ public class KafkaStreamGroupedKey {
   private static final String INPUT_TOPIC = "grouped-input-topic";
   private static final String OUTPUT_TOPIC = "grouped-output-topic";
   private static final String TEMP_STATE_DIR = "./temp";
+  private static final String PROCESSING_GUARANTEE_CONFIG = "exactly_once";
   private static final int NUM_PARTITIONS = 3;
   private static final short REPLICATION_FACTOR = 3;
 
@@ -40,6 +41,8 @@ public class KafkaStreamGroupedKey {
         Serdes.Long().getClass().getName());
     streamsConfiguration.put(
         StreamsConfig.STATE_DIR_CONFIG, TEMP_STATE_DIR);
+    streamsConfiguration.put(
+        StreamsConfig.PROCESSING_GUARANTEE_CONFIG, PROCESSING_GUARANTEE_CONFIG);
 
     return streamsConfiguration;
   }
@@ -72,13 +75,16 @@ public class KafkaStreamGroupedKey {
     createTopics();
 
     final StreamsBuilder builder = new StreamsBuilder();
-    builder
+    KStream<String, Long> outputStream = builder
         .stream(INPUT_TOPIC, Consumed.with(Serdes.String(), Serdes.Long()))
         .groupByKey()
-        .windowedBy(TimeWindows.of(Duration.ofSeconds(20)))
         .reduce(Long::sum)
-        .toStream()
-        .print(Printed.toSysOut());
+        .toStream();
+
+
+//    outputStream.print(Printed.toSysOut());
+    outputStream.to(OUTPUT_TOPIC,
+        Produced.with(Serdes.String(),Serdes.Long()));
 
     Topology topology = builder.build();
     final KafkaStreams streams = new KafkaStreams(topology,
