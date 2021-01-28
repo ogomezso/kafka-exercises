@@ -147,6 +147,8 @@
     ksqldb-cli:
       image: confluentinc/cp-ksqldb-cli:6.0.1
       container_name: ksqldb-cli
+      networks:
+        - localnet
       depends_on:
         - kafka1
         - kafka2

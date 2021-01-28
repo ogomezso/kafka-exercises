@@ -195,7 +195,7 @@ Primero crea un topic **console-example** con 3 particiones y factor de réplica
 
 Produciremos varios mensajes en el topic mediante el comando kafka-console-producer y observaremos el comportamiento:
 
-El mensaje a producir será uno simple que solo conntedra un id como body:
+El mensaje a producir será uno simple que solo contendrá un id como body:
 
 ```JSON
 1,{"id": "1"}
@@ -310,14 +310,14 @@ Toda la documentación oficial del API de Streams [aquí](https://kafka.apache.o
 
 Especial atención a los [conceptos basicos](https://kafka.apache.org/27/documentation/streams/core-concepts)
 
-También digno de mencionar como todas las semanticas de entrega estan sooportadas por infraestructura mediante la propiedad de configuración **processing.guarantee**
+También digno de mencionar como todas las semánticas de entrega están soportadas por infraestructura mediante la propiedad de configuración **processing.guarantee**
 
 
 ### KStream vs KTable
 
 Para el primer ejemplo buscaremos los básicos de Stream KTable y KStream, la mejor explicación grafica la podemos encontrar [aquí](https://www.confluent.io/blog/kafka-streams-tables-part-1-event-streaming/)
 
-Podemos ver el stream como una foto en un momento dado del estado de un topic/partición, esta foto se está siendo constantemente actualizada (si procesamos en tiempo real) o bien en micro batches en una ventana de tiempo, como vemos en los gráficos de la docu oficial cada momento del stream representa un mensaje en la historia del topic. Por contra en la tabla podremos de un solo momento (en un solo offset) obtener la informacion agregada del estado de nuestro topic.
+Podemos ver el stream como una foto en un momento dado del estado de un topic/partición, esta foto se está siendo constantemente actualizada (si procesamos en tiempo real) o bien en micro batches en una ventana de tiempo, como vemos en los gráficos de la docu oficial cada momento del stream representa un mensaje en la historia del topic. Por contra en la tabla podremos de un solo momento (en un solo offset) obtener la información agregada del estado de nuestro topic.
 
 En nuestro primer ejemplo **KafkaStreamsWordCount** vemos como el simple concepto de Ktable simplifica y hace mucho más eficiente nuestro código.
 
@@ -325,7 +325,7 @@ En nuestro primer ejemplo **KafkaStreamsWordCount** vemos como el simple concept
 
 Si nos fijamos en nuestro ejemplo **KafkaStreams** mediante un sencillo método (función lambda) aggregate podemos ir agregando, valga la redundancia, información que va llegando a nuestro topic.
 
-Podemos simplificar más aún estos calculus gracias a la abstracción **KGroupedStream** (ejemplos **KafkaStreamGroupedKey**, **KafkaStreamsAggregate**) que conseguiremos applicando **groupBy* a nuestro stream, sobre la que podemos aplicar funciones reduce, aggregate, flatmap, etc.
+Podemos simplificar más aún estos calculus gracias a la abstracción **KGroupedStream** (ejemplos **KafkaStreamGroupedKey**, **KafkaStreamsAggregate**) que conseguiremos aplicando **groupBy* a nuestro stream, sobre la que podemos aplicar funciones reduce, aggregate, flatmap, etc.
 
 ¿Qué diferencia vemos entre nuestros dos ejemplos?
 
@@ -357,15 +357,15 @@ Además esto nos provee de la interesante posibilidad de hacer queries interacti
 
 En nuestros ejemplos de **Movies** utilizaremos joins de streams sirviéndonos tanto de KTables  como de [GlobalKTables](https://kafka.apache.org/27/documentation/streams/developer-guide/dsl-api.html#streams_concepts_globalktable).
 
-Utilizaremos  estos ejemplos para ver como de una manera sencilla podemos implementar nuestros propios [serializadores y serdes](https://kafka.apache.org/10/documentation/streams/developer-guide/datatypes), que no es más que la abstracción que agrupa en una sola clase el serializador y deserializdor. Para ello solo tendremos que exteneder e implementar algunos métodos, para dar la logica de mapeo desde el tipo de entrada a nuestro tipo de salida. Puedes ver un ejemplo en el paquete **movies.serializers**, y un ejemplo generico de serializacion POJO <-> JSON en el paquete **streamutils**
+Utilizaremos  estos ejemplos para ver como de una manera sencilla podemos implementar nuestros propios [serializadores y serdes](https://kafka.apache.org/10/documentation/streams/developer-guide/datatypes), que no es más que la abstracción que agrupa en una sola clase el serializador y deserializdor. Para ello solo tendremos que exteneder e implementar algunos métodos, para dar la logica de mapeo desde el tipo de entrada a nuestro tipo de salida. Puedes ver un ejemplo en el paquete **movies.serializers**, y un ejemplo genérico de serialización POJO <-> JSON en el paquete **streamutils**
 
 ## Kafka Connect
 
-Connect es un herramienta que nos permite ingestar desde y hacia sistemas de persistencia externos (incluidos topics de kafka) usando workers (maquinas tanto en modo stand alone como distribuido) donde tendremos instalado el core de Connect (normalmente una instalación común de kafka nos valdría) usando para ello una serie de plugins (connectors).
+Connect es una herramienta que nos permite ingestar desde y hacia sistemas de persistencia externos (incluidos topics de kafka) usando workers (maquinas tanto en modo stand alone como distribuido) donde tendremos instalado el core de Connect (normalmente una instalación común de kafka nos valdría) usando para ello una serie de plugins (connectors).
 
-Como cualquier otra API construida "on top" of producer/consumer utiliza la propia infraestrucutura de Kafka para asegurarnos la persistencia, semánticas de entrega (es capaz de asegurar semanticas exactly once, dependiendo del conector).
+Como cualquier otra API construida "on top" of producer/consumer utiliza la propia infraestructura de Kafka para asegurarnos la persistencia, semánticas de entrega (es capaz de asegurar semanticas exactly once, dependiendo del conector).
 
-Solo necesitaremos arrancarlo pasandole un configuración, podemos ver un ejemplo tanto en la config de nuestro contenedor **connect** como en el fichero de ejemplo dentro de la carpeta **5.KafkaConnect/plaintext**.
+Solo necesitaremos arrancarlo pasándole una configuración, podemos ver un ejemplo tanto en la config de nuestro contenedor **connect** como en el fichero de ejemplo dentro de la carpeta **5.KafkaConnect/plaintext**.
 
 Cosas a tener en cuenta en esta configuración:
 
@@ -378,7 +378,7 @@ Mas info sobre como levantar connect e instalar plugin [aquí](https://docs.conf
 
 Además connect nos provee de un [API Rest](https://docs.confluent.io/platform/current/connect/references/restapi.html) para poder interactuar de manera amigable.
 
-Además existe un [hub](https://www.confluent.io/hub/) donde podremos buscar y descagar los connectors oficiales y no oficiales que necesitemos.
+Además existe un [hub](https://www.confluent.io/hub/) donde podremos buscar y descargar los connectors oficiales y no oficiales que necesitemos.
 
 ### Plain Text Connector Example
 
@@ -470,7 +470,7 @@ Hacemos el post para crear el nuevo conector:
 curl -d @"connect-mongo-source.json" -H "Content-Type: application/json" -X POST http://localhost:8083/connectors
 ````
 
-echemosle un ojo a la configuración:
+Echemosle un ojo a la configuración:
 
 ````
 {
@@ -534,7 +534,26 @@ Y, ¿Si paro el conector y lo vuelvo a arrancar?
 <details>
   <summary><b>Solución</b></summary>
 
-Si no hemos borrado los topics internos del conector el proceso deberia volver arracarse y volver a empezar el proceso en el punto que lo dejo.
+Si no hemos borrado los topics internos del conector el proceso debería volver arrancarse y volver a empezar el proceso en el punto que lo dejo.
 
 </details>
+
 ## KSQL
+
+
+KSQL es el API con el nivel de abstracción más alto de todas los que provee Kafka construido por encima del API de stream nos provee una sintaxis tipo SQL de manera 
+que mediante estas sentencias que todos podemos conocer podremos trabajar con KStreams, KTables y topics en general.
+
+Como veíamos antes se aprovecharemos la naturaleza stateful de los Streams para poder realizar estas operaciones.
+
+De modo similar a connect KSQL es un servidor (standalone o distribuido) que hará de proxy con nuestro cluster.
+
+Hay 3 maneras de comunicarnos con nuestro KSQL Server:
+
+* KSQL Client: Máquina Cliente, que nos hara las veces de cliente SQL (como un sql plus o similar), conectaremos con el servidor a través de https.
+* REST API, Podemos enviar nuestras queries al servidor a traves de su [api](https://docs.ksqldb.io/en/latest/developer-guide/api/) REST  
+* JAVA Client (BETA) : También nos provee de un cliente Java con el que podemos interactuar con el servidor de KSQL haciendo uso de su API REST.
+
+La Documentación de Referencia la podemos encontrarla [aquí](https://docs.ksqldb.io/en/latest/developer-guide/syntax-reference/).
+
+[Ejercicios de referencia](https://kafka-tutorials.confluent.io/multi-joins/ksql.html)
