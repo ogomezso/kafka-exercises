@@ -49,6 +49,14 @@ Kafka - de 0 a PRO - Práctica Guiada
 El repositorio estará organizado en carpetas, por temática (API), dentro de la cual encontraréis una
 con el ejercicio propuesto a resolver y otra con el ejercicio resuelto.
 
+El proyecto contiene bash script, código Python y código Java organizado en dos módulos Maven, para 
+compilar el proyecto situarse en la carpeta root y ejecutar:
+
+````
+mvn clean install
+````
+
+
 ## Arrancando el Clúster
 
 Abre la carpeta _**1.Environment**_ y ejecuta:
