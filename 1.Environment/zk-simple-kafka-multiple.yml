@@ -1,25 +1,23 @@
   version: '2.1'
   services:
     zoo1:
-      image: confluentinc/cp-zookeeper:6.0.1
+      image: confluentinc/cp-zookeeper:6.1.0
       hostname: zoo1
       container_name: zoo1
-      networks:
-        - localnet
       ports:
-        - "2181:2181"
+        - 2181:2181
       environment:
         ZOOKEEPER_CLIENT_PORT: 2181
         ZOOKEEPER_TICK_TIME: 2000
 
     kafka1:
-      image: confluentinc/cp-kafka:6.0.1
+      image: confluentinc/cp-kafka:6.1.0
       hostname: kafka1
       container_name: kafka-broker-1
-      networks:
-        - localnet
       ports:
-        - "9092:9092"
+        - 19092:19092
+        - 9092:9092
+        - 9101:9101
       environment:
         KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka1:19092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092
         KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
@@ -27,17 +25,23 @@
         KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
         KAFKA_BROKER_ID: 1
         KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+        KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+        KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+        KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+        KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+        KAFKA_JMX_PORT: 9101
+        KAFKA_JMX_HOSTNAME: localhost
       depends_on:
         - zoo1
 
     kafka2:
-      image: confluentinc/cp-kafka:6.0.1
+      image: confluentinc/cp-kafka:6.1.0
       hostname: kafka2
       container_name: kafka-broker-2
-      networks:
-        - localnet
       ports:
-        - "9093:9093"
+        - 19093:19093
+        - 9093:9093
+        - 9102:9102
       environment:
         KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka2:19093,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9093
         KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
@@ -45,17 +49,23 @@
         KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
         KAFKA_BROKER_ID: 2
         KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+        KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+        KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+        KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+        KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+        KAFKA_JMX_PORT: 9102
+        KAFKA_JMX_HOSTNAME: localhost
       depends_on:
         - zoo1
 
     kafka3:
-      image: confluentinc/cp-kafka:6.0.1
+      image: confluentinc/cp-kafka:6.1.0
       hostname: kafka3
       container_name: kafka-broker-3
-      networks:
-        - localnet
       ports:
-        - "9094:9094"
+        - 19094:19094
+        - 9094:9094
+        - 9103:9103
       environment:
         KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka3:19094,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9094
         KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
@@ -63,40 +73,42 @@
         KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
         KAFKA_BROKER_ID: 3
         KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+        KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+        KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+        KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+        KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+        KAFKA_JMX_PORT: 9103
+        KAFKA_JMX_HOSTNAME: localhost
       depends_on:
         - zoo1
 
 
     schema-registry:
-      image: confluentinc/cp-schema-registry:6.0.1
+      image: confluentinc/cp-schema-registry:6.1.0
       hostname: schema-registry
       container_name: schema-registry
-      networks:
-        - localnet
       depends_on:
         - kafka1
         - kafka2
         - kafka3
       ports:
-        - "8081:8081"
+        - 8081:8081
       environment:
         SCHEMA_REGISTRY_HOST_NAME: schema-registry
         SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka1:19092,kafka2:19093,kafka3:19094
         SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
 
     connect:
-      image: cnfldemos/kafka-connect-datagen:0.4.0-6.0.1
+      image: cnfldemos/kafka-connect-datagen:0.4.0-6.1.0
       hostname: connect
       container_name: connect
-      networks:
-        - localnet
       depends_on:
         - kafka1
         - kafka2
         - kafka3
         - schema-registry
       ports:
-        - "8083:8083"
+        - 8083:8083
       environment:
         CONNECT_BOOTSTRAP_SERVERS: kafka1:19092,kafka2:19093,kafka3:19094
         CONNECT_REST_ADVERTISED_HOST_NAME: connect
@@ -109,27 +121,23 @@
         CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
         CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
         CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
-        CONNECT_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
-        CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+        CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
+        CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
         CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-        CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components,/home/appuser/connectors"
+        CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
         CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
-      volumes:
-        - ./host-volume/connectors:/home/appuser/connectors
 
     ksqldb-server:
-      image: confluentinc/cp-ksqldb-server:6.0.1
+      image: confluentinc/cp-ksqldb-server:6.1.0
       hostname: ksqldb-server
       container_name: ksqldb-server
-      networks:
-        - localnet
       depends_on:
         - kafka1
         - kafka2
         - kafka3
         - connect
       ports:
-        - "8088:8088"
+        - 8088:8088
       environment:
         KSQL_CONFIG_DIR: "/etc/ksql"
         KSQL_BOOTSTRAP_SERVERS: kafka1:19092,kafka2:19093,kafka3:19094
@@ -145,10 +153,8 @@
         KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
 
     ksqldb-cli:
-      image: confluentinc/cp-ksqldb-cli:6.0.1
+      image: confluentinc/cp-ksqldb-cli:6.1.0
       container_name: ksqldb-cli
-      networks:
-        - localnet
       depends_on:
         - kafka1
         - kafka2
@@ -158,34 +164,8 @@
       entrypoint: /bin/sh
       tty: true
 
-    ksql-datagen:
-      image: confluentinc/ksqldb-examples:6.0.1
-      hostname: ksql-datagen
-      container_name: ksql-datagen
-      networks:
-        - localnet
-      depends_on:
-        - ksqldb-server
-        - kafka1
-        - kafka2
-        - kafka3
-        - schema-registry
-        - connect
-      command: "bash -c 'echo Waiting for Kafka to be ready... && \
-                         cub kafka-ready -b kafka1:19092,kafka2:19093,kafka3:19094 1 40 && \
-                         echo Waiting for Confluent Schema Registry to be ready... && \
-                         cub sr-ready schema-registry 8081 40 && \
-                         echo Waiting a few seconds for topic creation to finish... && \
-                         sleep 11 && \
-                         tail -f /dev/null'"
-      environment:
-        KSQL_CONFIG_DIR: "/etc/ksql"
-        STREAMS_BOOTSTRAP_SERVERS: kafka1:19092,kafka2:19093,kafka3:19094
-        STREAMS_SCHEMA_REGISTRY_HOST: schema-registry
-        STREAMS_SCHEMA_REGISTRY_PORT: 8081
-
     rest-proxy:
-      image: confluentinc/cp-kafka-rest:6.0.1
+      image: confluentinc/cp-kafka-rest:6.1.0
       depends_on:
         - kafka1
         - kafka2
@@ -195,8 +175,6 @@
         - 8082:8082
       hostname: rest-proxy
       container_name: rest-proxy
-      networks:
-        - localnet
       environment:
         KAFKA_REST_HOST_NAME: rest-proxy
         KAFKA_REST_BOOTSTRAP_SERVERS: kafka1:19092,kafka2:19093,kafka3:19094
@@ -204,45 +182,35 @@
         KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
 
     mongo1:
-      image: "mongo:4.0-xenial"
+      image: mongo:4.0-xenial
       hostname: mongo1
       container_name: mongo1
       command: --replSet rs0 --smallfiles --oplogSize 128
       volumes:
         - rs1:/data/db
-      networks:
-        - localnet
       ports:
-        - "27017:27017"
+        - 27017:27017
       restart: always
+
     mongo2:
-      image: "mongo:4.0-xenial"
+      image: mongo:4.0-xenial
       hostname: mongo2
       container_name: mongo2
       command: --replSet rs0 --smallfiles --oplogSize 128
       volumes:
         - rs2:/data/db
-      networks:
-        - localnet
       ports:
-        - "27018:27017"
+        - 27018:27017
       restart: always
+
     mongo3:
-      image: "mongo:4.0-xenial"
+      image: mongo:4.0-xenial
       hostname: mongo3
       container_name: mongo3
       command: --replSet rs0 --smallfiles --oplogSize 128
       volumes:
         - rs3:/data/db
-      networks:
-        - localnet
-      ports:
-        - "27019:27017"
       restart: always
-
-  networks:
-    localnet:
-      attachable: true
 
   volumes:
     rs1:
