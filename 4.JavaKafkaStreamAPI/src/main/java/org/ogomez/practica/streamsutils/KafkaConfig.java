@@ -16,7 +16,8 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 public class KafkaConfig {
 
 
-  static final String BOOTSTRAP_SERVERS = "127.0.0.1:9092, 127.0.0.1:9093, 127.0.0.1:9094";
+  static final String BOOTSTRAP_SERVERS_MULTI_BROKER = "127.0.0.1:9092, 127.0.0.1:9093, 127.0.0.1:9094";
+  static final String BOOTSTRAP_SERVERS_SINGLE_BROKER = "127.0.01:9092";
   static final String  CONSUMER_GROUP_ID = "simple-group";
   static final String INPUT_TOPIC = "simple-topic";
   public static final String SERIALIZATION_STRING_DESERIALIZER = "org.apache.kafka.common.serialization.StringDeserializer";
@@ -26,7 +27,7 @@ public class KafkaConfig {
 
   static KafkaConsumer<String, String> createKafkaLongConsumer() {
     Properties props = new Properties();
-    props.put(BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
+    props.put(BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_MULTI_BROKER);
     props.put(GROUP_ID_CONFIG, CONSUMER_GROUP_ID);
     props.put(KEY_DESERIALIZER_CLASS_CONFIG,
         SERIALIZATION_STRING_DESERIALIZER);
@@ -41,7 +42,7 @@ public class KafkaConfig {
   static KafkaProducer<String, Long> createKafkaLongProducer() {
 
     Properties props = new Properties();
-    props.put(BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
+    props.put(BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_MULTI_BROKER);
     props
         .put(KEY_SERIALIZER_CLASS_CONFIG, SERIALIZATION_STRING_SERIALIZER);
     props.put(VALUE_SERIALIZER_CLASS_CONFIG,

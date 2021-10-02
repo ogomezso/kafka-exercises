@@ -22,7 +22,8 @@ public class KafkaConfig {
   public static final String SERIALIZATION_STRING_SERIALIZER = "org.apache.kafka.common.serialization.StringSerializer";
   // Valor de la propiedad donde pasaremos las direcciones de TODOS nuestros Broker
   // Destacar que al llamarlos desde fuera docker utilizaremos localhost como direccion y el puerto por el que docker expone hacia fuera
-  static final String BOOTSTRAP_SERVERS = "127.0.0.1:9092, 127.0.0.1:9093, 127.0.0.1:9094";
+  static final String BOOTSTRAP_SERVERS_MULTI_BROKER = "127.0.0.1:9092, 127.0.0.1:9093, 127.0.0.1:9094";
+  static final String BOOTSTRAP_SERVER_SINGLE_BORKER  = "localhost:9092";
   // ID que usaremos para identitificar nuestro grupo de consumo
   static final String CONSUMER_GROUP_ID = "simple-group";
   // Nombre del topic
@@ -34,7 +35,7 @@ public class KafkaConfig {
     //Utilizaremos la clase Properties de java para modelar nuestro map de propiedades para el consumidor
     Properties props = new Properties();
     //Direccion de nuestros broker
-    props.put(BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
+    props.put(BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_MULTI_BROKER);
     //Id del consumidor
     props.put(GROUP_ID_CONFIG, CONSUMER_GROUP_ID);
     //Desde donde empezara a leer nuestro consumidor, en este caso desde el primer offset, equivalente al from-beginning del console-consumer
@@ -59,7 +60,7 @@ public class KafkaConfig {
     //Creamos nuestro fichero de propiedades para el producer
     Properties props = new Properties();
     //Direccion de TODOS los broker en los que producira (el solo sera capaz de encontrar el coordinador)
-    props.put(BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
+    props.put(BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_MULTI_BROKER);
     //Tipo por el que serializamos nuestra key
     props
         .put(KEY_SERIALIZER_CLASS_CONFIG, SERIALIZATION_STRING_SERIALIZER);

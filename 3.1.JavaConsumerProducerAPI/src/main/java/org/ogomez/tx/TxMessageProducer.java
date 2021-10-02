@@ -51,6 +51,7 @@ public class TxMessageProducer {
     Properties props = new Properties();
     //Dirección de los Broker
     props.put(BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092, 127.0.0.1:9093, 127.0.0.1:9094");
+//    props.put(BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092);
     //Propiedad con la que indicamos que queremos recibir el ACK de todas las replicas antes de dar el ACK a cliente
     props.put(ACKS_CONFIG,"all");
     //Indicamos que queremos que cada mensaje sea idempotente, es decir el mismo evento (OJO EVENTO no CONTENIDO DEL MISMO)
