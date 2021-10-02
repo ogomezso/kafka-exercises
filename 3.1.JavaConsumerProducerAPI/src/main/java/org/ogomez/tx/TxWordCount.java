@@ -56,7 +56,6 @@ public class TxWordCount {
             .flatMap(record -> Stream.of(record.value().split(" ")))
             .map(word -> Tuple.of(word, 1))
             .collect(Collectors.toMap(Tuple::getKey, Tuple::getValue, Integer::sum));
-
         //Una vez obtenida la lista de palabras y sus ocurrencias en el texto empezamos la transaccion de nuestro productor
         producer.beginTransaction();
 
@@ -77,7 +76,7 @@ public class TxWordCount {
           offsetsToCommit.put(partition, new OffsetAndMetadata(offset + 1));
         }
 
-        //mandamos al productor todos los offset que queremos comitear marcados por el consumer group que los consumio
+        //mandamos al productor todos los offset que queremos comitear marcados por el consumer group que los consumido
         producer.sendOffsetsToTransaction(offsetsToCommit, CONSUMER_GROUP_ID);
         //hacemos commit de nuestra transaccion
         producer.commitTransaction();
@@ -107,7 +106,7 @@ public class TxWordCount {
     //Id de grupo de consumo
     props.put(GROUP_ID_CONFIG, CONSUMER_GROUP_ID);
 
-    //deshabilitamos el auto commit, queremos controlar el momennto en el que se da por buena la TX
+    //deshabilitamos el auto commit, queremos controlar el momento en el que se da por buena la TX
     props.put(ENABLE_AUTO_COMMIT_CONFIG, "false");
 
     //el nivel de aislamiento de la tx de consumo, con esta propiedad nos aseguramos que no consumiremos

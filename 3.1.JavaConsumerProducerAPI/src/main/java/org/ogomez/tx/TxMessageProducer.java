@@ -63,7 +63,7 @@ public class TxMessageProducer {
     //Clase cono la que serializamos los mensajes
     props.put(VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
 
-    //devolvemos un KafkasProducer con las propiedades seteadas en la clase de configuración
+    //devolvemos un KafkaProducer con las propiedades seteadas en la clase de configuración
     return new KafkaProducer<>(props);
 
   }
