@@ -433,23 +433,15 @@ Antes de emepzar el ejemplo necesitaremos poner nuestra BBDD en orden.
 
 Para ello interactuaremos directamente con el contenedor (a falta de un cliente de mongo, si lo tenéis sentíos libres de usarlo)
 
-````
-docker-compose -f zk-simple-kafka-multiple.yml exec mongo1 /usr/bin/mongo
-````
-Iniciamos el replica set
+```bash
+docker-compose exec mongo bash
+```
 
-````
-rs.initiate({_id : 'rs0',
-            members: [
-                      { _id : 0, host : "mongo1:27017" },
-                      { _id : 1, host : "mongo2:27017" },
-                      { _id : 2, host : "mongo3:27017" }
-            ]} )
-````
+```bash
+mongosh --username admin --password admin
+```
 
-y creamos nuestra coleccion:
-
-````
+```bash
 db.createCollection( "movies", {
    validator: { $jsonSchema: {
       bsonType: "object",
@@ -470,7 +462,7 @@ db.createCollection( "movies", {
       }
    } }
 } )
-````
+```
 Para el ejercicio usaremos el mismo modelo que ya usamos en movies.
 
 Hacemos el post para crear el nuevo conector:
@@ -489,7 +481,7 @@ Echemosle un ojo a la configuración:
     "tasks.max": 1,
     "database": "test",
     "collection": "movies",
-    "connection.uri": "mongodb://mongo1:27017,mongo2:27017,mongo3:27017",
+    "connection.uri": "mongodb://mongo:27017",
     "key.converter":"org.apache.kafka.connect.storage.StringConverter",
     "value.converter":"org.apache.kafka.connect.storage.StringConverter",
     "topic.prefix": "",

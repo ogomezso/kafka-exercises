@@ -1,5 +1,6 @@
 package org.ogomez.tx;
 
+import org.apache.kafka.clients.consumer.ConsumerGroupMetadata;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -76,8 +77,9 @@ public class TxWordCount {
           offsetsToCommit.put(partition, new OffsetAndMetadata(offset + 1));
         }
 
+        ConsumerGroupMetadata consumerGroupMetadata = new ConsumerGroupMetadata(CONSUMER_GROUP_ID);
         //mandamos al productor todos los offset que queremos comitear marcados por el consumer group que los consumido
-        producer.sendOffsetsToTransaction(offsetsToCommit, CONSUMER_GROUP_ID);
+        producer.sendOffsetsToTransaction(new HashMap<>(), consumerGroupMetadata);
         //hacemos commit de nuestra transaccion
         producer.commitTransaction();
         //en este momento podemos estar 100% seguros de que nuestros mensajes han sido recibidos y persistidos en el topic de salida de Kafka
@@ -91,8 +93,6 @@ public class TxWordCount {
       producer.abortTransaction();
 
     }
-
-
   }
 
   private static KafkaConsumer<String, String> createKafkaConsumer() {
