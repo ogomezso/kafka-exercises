@@ -82,7 +82,7 @@ public class KafkaStreamGroupedKey {
         .toStream();
 
 
-//    outputStream.print(Printed.toSysOut());
+    outputStream.print(Printed.toSysOut());
     outputStream.to(OUTPUT_TOPIC,
         Produced.with(Serdes.String(),Serdes.Long()));
 

@@ -22,6 +22,17 @@
       <groupId>org.slf4j</groupId>
       <version>${slf4j.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
   </dependencies>
 
   <modelVersion>4.0.0</modelVersion>
@@ -33,10 +44,11 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
   <properties>
-    <kafka.version>2.7.0</kafka.version>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
-    <slf4j.version>1.7.25</slf4j.version>
+    <kafka.version>3.3.1</kafka.version>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <slf4j.version>2.0.3</slf4j.version>
+    <jackson.version>2.13.4.2</jackson.version>
   </properties>
 
   <version>1.0-SNAPSHOT</version>

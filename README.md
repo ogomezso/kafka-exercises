@@ -558,3 +558,38 @@ Hay 3 maneras de comunicarnos con nuestro KSQL Server:
 La Documentación de Referencia la podemos encontrarla [aquí](https://docs.ksqldb.io/en/latest/developer-guide/syntax-reference/).
 
 [Ejercicios de referencia](https://kafka-tutorials.confluent.io/multi-joins/ksql.html)
+
+## Anexo: Como ejecutar Aplicaciones Java desde Maven
+
+Como ejemplo usaremos el ejercicio de productor/consumidor simple contenido en la carpeta: `3.1.JavaConsumerProducerAPI/src/main/java/org/ogomez/nontx`.
+
+Para la ejecución del mismo usaremos el plugin maven `exec`.
+
+1. Ve a la carpeta raiz de proyecto kafka-exercises y ejecuta:
+```bash
+mvn clean install
+```
+Con esto habremos conseguido compilar nuestro proyecto correctamente.
+2. Ve a la carpeta raiz de los ejercicio JAVA:
+
+```bash
+cd 3.1.JavaConsumerProducerAPI
+```
+
+3. Ejecuta en **una consola aparte cada una de las aplicaciones**:
+
+```bash
+mvn exec:java -Dexec.mainClass="org.ogomez.nontx.SimpleConsumer"
+```
+```bash
+mvn exec:java -Dexec.mainClass="org.ogomez.nontx.SimpleConsumer2"
+```
+```bash
+mvn exec:java -Dexec.mainClass="org.ogomez.nontx.SimpleConsumer3"
+```
+
+```bash
+mvn exec:java -Dexec.mainClass="org.ogomez.nontx.SimpleProducer"
+```
+![til](./assets/mvn_exec.gif)
+

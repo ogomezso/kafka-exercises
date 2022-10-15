@@ -4,3 +4,5 @@
 /3.1.JavaConsumerProducerAPI/target/
 /5.JavaKafkaConnectAPI/target/
 /4.JavaKafkaStreamAPI/target/
+/temp/
+.DS_Store
