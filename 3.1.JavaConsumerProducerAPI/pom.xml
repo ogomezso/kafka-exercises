@@ -35,4 +35,13 @@
     <slf4j.version>2.0.3</slf4j.version>
   </properties>
   <version>1.0-SNAPSHOT</version>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
+      </plugin>
+    </plugins>
+  </build>
 </project>
